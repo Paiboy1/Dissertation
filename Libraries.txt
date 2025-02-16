@@ -1,0 +1,5 @@
+Osmium - OSMX
+osmnx matplotlib
+osmnx matplotlib networkx
+pandas openpyxl
+pyrosm
