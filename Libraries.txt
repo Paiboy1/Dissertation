@@ -3,3 +3,4 @@ osmnx matplotlib
 osmnx matplotlib networkx
 pandas openpyxl
 pyrosm
+meteostat

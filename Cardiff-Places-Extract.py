@@ -15,7 +15,7 @@ class BuildingExtractor(osmium.SimpleHandler):
     def __init__(self, node_store):
         super().__init__()
         self.node_store = node_store  
-        self.excluded_types = {"shed", "garage", "container", "greenhouse"}  # Excluded building types
+        self.excluded_types = {"shed", "garage", "container", "greenhouse"} 
         self.building_data = []  
 
     def way(self, w):
@@ -23,17 +23,18 @@ class BuildingExtractor(osmium.SimpleHandler):
             building_type = w.tags["building"]
             building_name = w.tags.get("name", "Unnamed Building")
 
-            # Remove buildings where BOTH name is "Unnamed Building" AND type is "yes"
+            # Skip buildings where BOTH names is "Unnamed Building" AND type is "yes"
             if building_name == "Unnamed Building" and building_type == "yes":
                 return
 
             first_valid_location = None
 
+            # Define Cardiff area
             for node in w.nodes:
                 node_id = node.ref
                 if node_id in self.node_store.node_locations:
                     lat, lon = self.node_store.node_locations[node_id]
-                    if 51.40 <= lat <= 51.55 and -3.25 <= lon <= -3.05:  # Cardiff bounding box
+                    if 51.40 <= lat <= 51.55 and -3.25 <= lon <= -3.05:  
                         first_valid_location = (lat, lon)
                         break  
 
@@ -50,10 +51,10 @@ def main(osm_file):
 
     df = pd.DataFrame(handler.building_data)
 
-    # Save DataFrame to Excel
+    # Save to Excel
     df.to_excel("cardiff_buildings.xlsx", index=False)
 
-    print("Saved Cardiff buildings to cardiff_buildings.xlsx!")
+    print("Saved Cardiff buildings")
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:

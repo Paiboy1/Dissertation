@@ -14,12 +14,12 @@ class NodeStore(osmium.SimpleHandler):
 class RoadExtractor(osmium.SimpleHandler):
     def __init__(self, node_store):
         super().__init__()
-        self.node_store = node_store  # Store reference to nodes
+        self.node_store = node_store  
         self.excluded_types = {
             "footway", "steps", "service", "path", "bridleway", 
             "track", "cycleway", "pedestrian"
-        }  # Excluded road types
-        self.road_data = []  # List to store extracted road details
+        }  
+        self.road_data = []  
 
     def way(self, w):
         if "highway" in w.tags and len(w.nodes) > 0:
@@ -32,16 +32,15 @@ class RoadExtractor(osmium.SimpleHandler):
             road_name = w.tags.get("name", "Unnamed Road")
             first_valid_location = None
 
-            # Find first valid node within Cardiff
+            # Define Cardiff area
             for node in w.nodes:
                 node_id = node.ref
                 if node_id in self.node_store.node_locations:
                     lat, lon = self.node_store.node_locations[node_id]
 
-                    # Check if location is within Cardiff bounding box
                     if 51.40 <= lat <= 51.55 and -3.25 <= lon <= -3.05:
                         first_valid_location = (lat, lon)
-                        break  # Stop after finding first valid node in Cardiff
+                        break  
 
             if first_valid_location:
                 lat, lon = first_valid_location
@@ -49,15 +48,13 @@ class RoadExtractor(osmium.SimpleHandler):
 
 def main(osm_file):
     node_store = NodeStore()
-    node_store.apply_file(osm_file)  # Extract node locations first
+    node_store.apply_file(osm_file)  
 
     handler = RoadExtractor(node_store)
-    handler.apply_file(osm_file)  # Now process roads using valid node locations
+    handler.apply_file(osm_file)  
 
-    # Convert extracted data to a DataFrame
     df = pd.DataFrame(handler.road_data)
 
-    # Save DataFrame to an Excel file
     df.to_excel("cardiff_roads.xlsx", index=False)
 
     print("✅ Saved Cardiff roads to cardiff_roads.xlsx!")
