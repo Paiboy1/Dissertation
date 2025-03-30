@@ -28,5 +28,5 @@ if response.status_code == 200:
     
     df = pd.DataFrame(event_list, columns=["Event Name", "Date", "Venue"])
 
-    df.to_excel("cardiff_events.xlsx", index=False)
-    print("Events saved to cardiff_events.xlsx")
+    df.to_csv("datasets/cardiff_events.csv", index=False)
+    print("Events saved to cardiff_events.csv")
