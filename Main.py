@@ -6,10 +6,16 @@ import matplotlib.pyplot as plt
 # Load datasets
 df = pd.read_csv("main_data.csv")
 weather_df = pd.read_csv("datasets/cardiff_weather_forecast.csv")
+events_df = pd.read_csv("datasets/cardiff_events.csv")
 
 # Define features and target (no weather impact score)
 target = "all_motor_vehicles"
 features = ["month", "day_of_week", "hour", "year", "road_type_major", "road_type_minor", "weather_encoded", "hour_weight"]
+
+# Handle events
+events_df["Date"] = pd.to_datetime(events_df["Date"], dayfirst=True).dt.date
+event_dates = set(events_df["Date"])
+df["event_day"] = df["Date"].apply(lambda d: 1 if d in event_dates else 0)
 
 x = df[features]
 y = df[target]
@@ -61,6 +67,12 @@ def predict_future_traffic(count_point_id, date_str, hour):
     road_type_major = road_data["road_type_major"].mode()[0]
     road_type_minor = road_data["road_type_minor"].mode()[0]
 
+    event_road_match = (
+        (date.date() in event_dates)
+        and (road_name_input.upper() in events_df[events_df["date"] == date.date()]["road_name"].values)
+    )
+    event_day = 1 if event_road_match else 0
+
     # Input row
     input_row = {
         "month": month,
@@ -70,7 +82,8 @@ def predict_future_traffic(count_point_id, date_str, hour):
         "road_type_major": road_type_major,
         "road_type_minor": road_type_minor,
         "weather_encoded": weather_encoded,
-        "hour_weight": hour_weight
+        "hour_weight": hour_weight,
+        "event_day": event_day,
     }
 
     input_df = pd.DataFrame([input_row])
@@ -92,6 +105,6 @@ plt.show()
 while True:
     road_name_input = input("Enter the road name (e.g., A48): ")
     date_input = input("Enter the date (DD/MM/YYYY): ")
-    hour_input = int(input("Enter hour of day (0–23): "))
+    hour_input = int(input("Enter hour of day (7–18): "))
     predict_future_traffic(road_name_input, date_input, hour_input)
     print()
