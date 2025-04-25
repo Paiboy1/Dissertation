@@ -38,12 +38,14 @@ if response.status_code == 200:
     for event in events:
         name = event.get('name', 'No event name')
         start_date = event.get('dates', {}).get('start', {}).get('localDate', 'No date')
+        start_time = event.get('dates', {}).get('start', {}).get('localTime', 'Unknown time')
         venue = event.get('_embedded', {}).get('venues', [{}])[0].get('name', 'No venue')
         road = venue_to_road.get(venue, "Unknown")
-        
-        print(f"Event: {name}\nDate: {start_date}\nVenue: {venue}\nRoad: {road}\n")
-        event_list.append([name, start_date, venue, road])
-    
-    df = pd.DataFrame(event_list, columns=["Event Name", "Date", "Venue", "Road Name"])
+
+        event_list.append([name, start_date, start_time, venue, road, 1])  # ← Add time
+
+    # Save DataFrame with event_day column
+    df = pd.DataFrame(event_list, columns=["Event Name", "Date", "Time", "Venue", "Road Name", "event_day"])
     df.to_csv("datasets/cardiff_events.csv", index=False)
-    print("Events saved to cardiff_events.csv")
+
+    print("✔ Events saved with time info.")

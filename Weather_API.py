@@ -32,8 +32,6 @@ def get_hour_weight(hour):
 if response.status_code == 200:
     weather_data = response.json()
 
-    print("5-Day Weather Forecast for Cardiff (every 3 hours):\n")
-
     forecast_list = []
 
     for forecast in weather_data["list"]:
@@ -41,7 +39,6 @@ if response.status_code == 200:
         temp = forecast["main"]["temp"]
         condition = forecast["weather"][0]["description"]
 
-        print(f"Time: {timestamp}, Temperature: {temp}°C, Condition: {condition}")
         forecast_list.append([timestamp, temp, condition])
 
     df = pd.DataFrame(forecast_list, columns=["Time", "Temperature (°C)", "Condition"])
@@ -56,4 +53,3 @@ if response.status_code == 200:
     df["weather_hour_impact"] = df["weather_encoded"] * df["hour_weight"]
 
     df.to_csv("Datasets/cardiff_weather_forecast.csv", index=False)
-    print("Weather forecast saved to cardiff_weather_forecast.csv")
