@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Route Prediction</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Arial, sans-serif;
+    }
+
+    #form-container {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="form-container">
+    <h2>Predict Your Route</h2>
+    <form method="POST">
+      <label for="date">Date (DD/MM/YYYY):</label><br>
+      <input type="text" name="date"><br><br>
+
+      <label for="hour">Hour (7–18):</label><br>
+      <input type="text" name="hour"><br><br>
+
+      <label for="start">Start Location:</label><br>
+      <input type="text" name="start"><br><br>
+
+      <label for="end">End Location:</label><br>
+      <input type="text" name="end"><br><br>
+
+      <input type="submit" value="Predict Route">
+    </form>
+  </div>
+</body>
+</html>
