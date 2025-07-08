@@ -121,6 +121,8 @@ def predict_all_roads(date_str, hour):
 if __name__ == "__main__":
     predict_all_roads(date_input, int(hour_input))
 
+    
+
 # Model evaluation 
 #y_pred = rf_model.predict(X_test)
 

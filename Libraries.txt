@@ -1,9 +1,0 @@
-Osmium - OSMX
-osmnx matplotlib
-osmnx matplotlib networkx
-pandas openpyxl
-pyrosm
-meteostat
-scikit-learn
-
-train/validation/test
